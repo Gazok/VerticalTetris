@@ -2,10 +2,10 @@ package {
 	public class A
 	{
 		// graphics
-		[Embed(source = "../res/Block.png")] static public const block:Class;
+        [Embed(source = "../res/Block.png")] static public const block:Class;
 
 		// audio
-		//[Embed(source = '../assets/sound/crash.mp3')] static public const sndCRASH:Class;
+        [Embed(source = "../res/TetrisMusic.mp3")] static public const korobeiniki:Class;
 
 		// collision types
 		//static public const typWALL:String = "wall";

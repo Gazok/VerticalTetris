@@ -36,5 +36,10 @@ package {
             block.alpha = index;
             block.color = colors[index];
         }
+
+        public function isActive():Boolean
+        {
+            return Boolean(color_);
+        }
     }
 }
