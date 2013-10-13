@@ -1,8 +1,8 @@
 package {
-	public class A 
+	public class A
 	{
 		// graphics
-		//[Embed(source = "../assets/graphics/ufoSheet.png")] static public const gfxALIEN:Class;
+		[Embed(source = "../res/Block.png")] static public const block:Class;
 
 		// audio
 		//[Embed(source = '../assets/sound/crash.mp3')] static public const sndCRASH:Class;
