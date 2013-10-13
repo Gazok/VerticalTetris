@@ -7,14 +7,14 @@ package {
     public class GridSlot extends Entity
     {
         public static const colors:Array
-            = new Array(0xF0F0F0, //Inactive/Grey
-                        0x2392fc, //Cyan
+            = new Array(0xFFFFFF, //Inactive/Grey
+                        0x5392fc, //Cyan
                         0xcfd344, //Yellow
-                        0xa242ef, //Purple
+                        0x6242cf, //Purple
                         0x23923c, //Green
                         0xd6124b, //Red
-                        0x5221ca, //Blue
-                        0x81423c);//Orange
+                        0x3231ca, //Blue
+                        0xc1727c);//Orange
 
         private var color_:uint = 0;
         private const block:Image = new Image(A.block);
@@ -33,6 +33,7 @@ package {
         public function setColor(index:uint):void
         {
             color_ = index;
+            block.alpha = index;
             block.color = colors[index];
         }
     }
