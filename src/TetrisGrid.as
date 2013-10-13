@@ -32,7 +32,7 @@ package {
                 for (var j:int = 0; j < gridHeight_; ++j)
                 {
                     grid_[i][j] = new GridSlot(i, j);
-                    grid_[i][j].setColor(j % 8);
+                    grid_[i][j].setColor((i + j) % 8);
                 }
             }
         }
