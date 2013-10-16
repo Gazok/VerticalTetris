@@ -19,7 +19,7 @@ package {
                 for (var j:int = 0; j < gridHeight_; ++j)
                 {
                     grid_[i][j] = new GridSlot(i, j);
-                    grid_[i][j].setColor((i + j) % 8);
+                    grid_[i][j].setColor(0);
                 }
             }
         }
@@ -35,6 +35,7 @@ package {
             }
 
             clearLine(6);
+            setColor(3,3,3);
         }
 
         public function isTaken(x:int, y:int):Boolean
@@ -83,7 +84,8 @@ package {
                     grid_[x][y].setColor(grid_[x+1][y].getColor());
                 }
             }
-            for (var y2:int = 0; y2 <= gridHeight_; ++y2)
+
+            for (var y2:int = 0; y2 < gridHeight_; ++y2)
             {
                 grid_[gridWidth_ - 1][y2].setColor(0);
             }
