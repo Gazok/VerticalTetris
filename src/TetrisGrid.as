@@ -4,19 +4,6 @@ package {
     import net.flashpunk.FP;
     import net.flashpunk.graphics.Canvas;
 
-    /*
-    public class TetrisGrid extends Entity
-    {
-        private var grid:Array;
-        private var c:Canvas = new Canvas(10,10);
-
-        public function TetrisGrid()
-        {
-            c.fill(new Rectangle(0,0,10,10), 0xFF0000)
-            graphic = c;
-        }
-    }
-    */
     public class TetrisGrid extends Entity
     {
         private const gridWidth_:int = 10;
@@ -45,6 +32,60 @@ package {
                 {
                     this.world.add(grid_[i][j]);
                 }
+            }
+
+            clearLine(6);
+        }
+
+        public function isTaken(x:int, y:int):Boolean
+        {
+            if (x < 0 || y < 0 || x >= gridWidth_ || y >= gridHeight_)
+            {
+                return true;
+            }
+
+            return grid_[x][y].getColor();
+        }
+
+        public function setColor(x:int, y:int, colorIndex:uint):void
+        {
+            if (x < 0 || y < 0 || x >= gridWidth_ || y >= gridHeight_) return;
+
+            grid_[x][y].setColor(colorIndex);
+        }
+
+        public function refresh():void
+        {
+            var filledLine:Boolean;
+            for (var x:int = 0; x < gridWidth_; ++x)
+            {
+                filledLine = true;
+                for (var y:int = 2; y < gridHeight_; ++y)
+                {
+                    filledLine &&= grid_[x][y].isActive();
+                }
+
+                if (filledLine)
+                {
+                    clearLine(x);
+                }
+            }
+        }
+
+        private function clearLine(clearX:int):void
+        {
+            if(clearX < 0 || clearX >= gridWidth_) return;
+
+            for(var x:int = clearX; x < gridWidth_ - 1; ++x)
+            {
+                for(var y:int = 0; y < gridHeight_; ++y)
+                {
+                    grid_[x][y].setColor(grid_[x+1][y].getColor());
+                }
+            }
+            for (var y2:int = 0; y2 <= gridHeight_; ++y2)
+            {
+                grid_[gridWidth_ - 1][y2].setColor(0);
             }
         }
     }

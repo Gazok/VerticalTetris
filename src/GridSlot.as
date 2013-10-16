@@ -8,13 +8,13 @@ package {
     {
         public static const colors:Array
             = new Array(0xFFFFFF, //Inactive/Grey
-                        0x5392fc, //Cyan
-                        0xcfd344, //Yellow
-                        0x6242cf, //Purple
-                        0x23923c, //Green
-                        0xd6124b, //Red
-                        0x3231ca, //Blue
-                        0xc1727c);//Orange
+                        0x5392fc, //Cyan l
+                        0xcfd344, //Yellow O
+                        0x6242cf, //Purple T
+                        0x23923c, //Green S
+                        0xd6124b, //Red Z
+                        0x3231ca, //Blue J
+                        0xc1727c);//Orange L
 
         private var color_:uint = 0;
         private const block:Image = new Image(A.block);
@@ -32,9 +32,13 @@ package {
         }
         public function setColor(index:uint):void
         {
+            if (index > colors.size) return;
+
             color_ = index;
-            block.alpha = index;
             block.color = colors[index];
+
+            // If index = 0, show transparent outline
+            block.alpha = index + 0.05; 
         }
 
         public function isActive():Boolean
