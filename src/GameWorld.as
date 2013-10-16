@@ -13,7 +13,9 @@ package {
 
         override public function begin():void
         {
-            add(new TetrisGrid());
+            var t:TetrisGrid = new TetrisGrid();
+            add(t)
+            add(new Tetrimino(4, t));
 			TetrisMusic.loop();
         }
     }

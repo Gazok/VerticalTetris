@@ -38,7 +38,7 @@ package {
             block.color = colors[index];
 
             // If index = 0, show transparent outline
-            block.alpha = index + 0.05; 
+            block.alpha = index + 0.05;
         }
 
         public function isActive():Boolean

@@ -35,7 +35,6 @@ package {
             }
 
             clearLine(6);
-            setColor(3,3,3);
         }
 
         public function isTaken(x:int, y:int):Boolean
