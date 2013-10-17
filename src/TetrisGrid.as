@@ -11,9 +11,11 @@ package {
         private var grid_:Array = new Array(gridWidth_);
 
         private var bucket_:Array = new Array(0);
+        private var hs_:Highscore;
 
-        public function TetrisGrid()
+        public function TetrisGrid(hs:Highscore)
         {
+            hs_ = hs;
             for (var i:int = 0; i < gridWidth_; ++i)
             {
                 grid_[i] = new Array(gridHeight_);
@@ -84,7 +86,9 @@ package {
 
         public function refresh():void
         {
+            var numLinesCleared:int = 0;
             var filledLine:Boolean;
+
             for (var x:int = 0; x < gridWidth_; ++x)
             {
                 filledLine = true;
@@ -95,18 +99,21 @@ package {
 
                 if (filledLine)
                 {
+                    ++numLinesCleared;
                     clearLine(x);
                 }
             }
+
+            hs_.addToScore(Math.pow(numLinesCleared,2) * 100);
         }
 
         private function clearLine(clearX:int):void
         {
-            if(clearX < 0 || clearX >= gridWidth_) return;
+            if (clearX < 0 || clearX >= gridWidth_) return;
 
-            for(var x:int = clearX; x < gridWidth_ - 1; ++x)
+            for (var x:int = clearX; x < gridWidth_ - 1; ++x)
             {
-                for(var y:int = 0; y < gridHeight_; ++y)
+                for (var y:int = 0; y < gridHeight_; ++y)
                 {
                     grid_[x][y].setColor(grid_[x+1][y].getColor());
                 }

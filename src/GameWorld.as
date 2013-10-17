@@ -14,11 +14,10 @@ package {
         override public function begin():void
         {
             add(new Background());
-            var t:TetrisGrid = new TetrisGrid();
-            add(t)
-            add(new Highscore());
+            var hs:Highscore = new Highscore();
+            add(new TetrisGrid(hs));
+            add(hs);
             TetrisMusic.loop();
         }
     }
-
 }
