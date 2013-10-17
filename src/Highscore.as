@@ -2,6 +2,7 @@ package
 {
 	import net.flashpunk.Entity;
 	import net.flashpunk.graphics.Text; //we want to use text
+    import net.flashpunk.graphics.Image;//use images
 	import net.flashpunk.utils.Input;
 	import net.flashpunk.utils.Key;
 
@@ -10,6 +11,7 @@ package
 		private var highscore:Text;
         private var test:Text;
         private var score:int;
+        //[Embed(source="../res/placeholder frame.png")] private const PLAYER:Class;
         //get font():String;
         //set score.font(TechnoHideo.ttf:String);
         //[Embed(source="net/flashpunk/graphics/TechnoHideo.ttf")]
@@ -23,6 +25,7 @@ package
 			//Show Highscore?
 			//Does a loop whereby it outputs score from array
 		    //Goes to next stored score and draws it down incrementally.
+            //graphic = new Image(PLAYER);
 		}
 		
 		override public function update():void
