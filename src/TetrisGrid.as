@@ -33,8 +33,6 @@ package {
                     this.world.add(grid_[i][j]);
                 }
             }
-
-            clearLine(6);
         }
 
         public function isTaken(x:int, y:int):Boolean

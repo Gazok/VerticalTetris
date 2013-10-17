@@ -53,7 +53,6 @@ package {
 
             updateGrid();
             gridMove(0, 2);
-            rotateCCW();
         }
 
         public override function update():void
@@ -65,6 +64,18 @@ package {
             if (Input.pressed(Key.D))
             {
                 rotateCW();
+            }
+            if (Input.pressed(Key.DOWN))
+            {
+                gridMove(0, 1);
+            }
+            if (Input.pressed(Key.RIGHT))
+            {
+                gridMove(1, 0);
+            }
+            if (Input.pressed(Key.LEFT))
+            {
+                gridMove(-1, 0);
             }
         }
 
@@ -127,12 +138,21 @@ package {
             }
 
             clearCurrentPosition();
+            var tempTetrimino:Array = tetrimino_;
             tetrimino_ = newTetrimino;
+
+            if (!checkOffset())
+            {
+                clearCurrentPosition();
+                tetrimino_ = tempTetrimino;
+            }
+
             updateGrid();
         }
 
-        private function checkOffset(offX:int, offY:int):Boolean
+        private function checkOffset(offX:int = 0, offY:int = 0):Boolean
         {
+            clearCurrentPosition(); // Don't collide with myself
             for (var x:int = 0; x < tetrimino_.length; ++x)
             {
                 for (var y:int = 0; y < tetrimino_[x].length; ++y)
@@ -141,12 +161,14 @@ package {
                     {
                         if (grid_.isTaken(x + this.x + offX, y + this.y + offY))
                         {
+                            updateGrid(); // Redraw myself
                             return false;
                         }
                     }
                 }
             }
 
+            updateGrid(); // Redraw myself
             return true;
         }
 
