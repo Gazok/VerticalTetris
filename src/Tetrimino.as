@@ -1,6 +1,7 @@
 package {
 
     import net.flashpunk.Entity;
+    import net.flashpunk.FP;
     import net.flashpunk.tweens.misc.Alarm;
     import net.flashpunk.utils.Input;
     import net.flashpunk.utils.Key;
@@ -62,50 +63,77 @@ package {
                     new Array(1,1,1,1),
                     new Array(0,0,0,0)));
 
+        private var moveTimer_:Alarm;
         private var tetriminoType_:uint = 0;
         private var tetrimino_:Array;
         private var grid_:TetrisGrid;
 
+        private var active_:Boolean = true;
+        private var noKill_:Boolean = false;
+
 
         public function Tetrimino(type:uint, grid:TetrisGrid)
         {
-            tetriminoType_ = type;
-            grid_ = grid;
             x = 3;
             y = 0;
-
+            tetriminoType_ = type;
+            grid_ = grid;
             tetrimino_ = tetriminos_[tetriminoType_];
+            moveTimer_ = FP.alarm(0.5, this.moveDown);
 
             updateGrid();
-            gridMove(0, 2);
         }
 
         public override function update():void
         {
-            if (Input.pressed(Key.A))
+            if (active_)
             {
-                rotateCCW();
-            }
-            if (Input.pressed(Key.D))
-            {
-                rotateCW();
-            }
-            if (Input.pressed(Key.DOWN))
-            {
-                gridMove(0, 1);
-            }
-            if (Input.pressed(Key.RIGHT))
-            {
-                gridMove(1, 0);
-            }
-            if (Input.pressed(Key.LEFT))
-            {
-                gridMove(-1, 0);
+                if (Input.pressed(Key.A))
+                {
+                    rotateCCW();
+                }
+                if (Input.pressed(Key.D))
+                {
+                    rotateCW();
+                }
+                if (Input.pressed(Key.UP))
+                {
+                    hardDrop();
+                }
+                if (Input.pressed(Key.DOWN))
+                {
+                    gridMove(0, 1);
+                }
+                if (Input.pressed(Key.RIGHT))
+                {
+                    if(gridMove(1, 0))
+                    {
+                        noKill_ = true;
+                    }
+                }
+                if (Input.pressed(Key.LEFT))
+                {
+                    if(gridMove(-1, 0))
+                    {
+                        noKill_ = true;
+                    }
+                }
+
+                if (moveTimer_.remaining <= 0)
+                {
+                    moveTimer_ = FP.alarm(0.5, this.moveDown);
+                }
             }
         }
 
-        public function hardDrop():void
+        public function moveDown():void
         {
+            if (!gridMove(0, 1) && !noKill_)
+            {
+                endTurn();
+            }
+
+            noKill_ = false;
         }
 
         public function gridMove(moveX:int, moveY:int):Boolean
@@ -133,16 +161,30 @@ package {
             gridRotate(1);
         }
 
-        private function gridRotate(dir:int):void
+        public function hardDrop():void
         {
-            if (tetrimino_.length == 2) return; // Don't rotate O block
+            while (gridMove(0,1)) {}
+            endTurn();
+        }
+
+        public function endTurn():void
+        {
+            world.remove(this);
+            active_ = false;
+        }
+
+        private function gridRotate(dir:int):Boolean
+        {
+            if (tetrimino_.length == 2) return true; // Don't rotate O block
 
             clearCurrentPosition();
 
+            var success:Boolean = true;
             var tempTetrimino:Array = tetrimino_;
 
             if (tetrimino_.length == 4) //Give the I block special treatment
             {
+                // Horrific hack
                 var index:int;
                 if (tetrimino_[0][1]) index = 0 + dir
                 else if (tetrimino_[1][0]) index = 1 + dir;
@@ -164,21 +206,22 @@ package {
                     newTetrimino[i] = new Array(tetrimino_.length);
                 }
 
-                // Rotate the old grid into the new one
+                // Copy the rotated old grid into the new one
                 var rotX:int;
                 var rotY:int;
+                const halfWidth:int = (tetrimino_.length - 1) / 2;
                 for (var x:int = 0; x < tetrimino_.length; ++x)
                 {
-                    const transX:int = x - (tetrimino_.length - 1) / 2;
+                    const transX:int = x - halfWidth;
                     for (var y:int = 0; y < tetrimino_[x].length; ++y)
                     {
-                        const transY:int = y - (tetrimino_.length - 1) / 2;
+                        const transY:int = y - halfWidth;
 
                         rotX = dir * transY;
                         rotY = - dir * transX;
 
-                        newTetrimino[rotX + (tetrimino_.length - 1) / 2]
-                                    [rotY + (tetrimino_.length - 1) / 2]
+                        newTetrimino[rotX + halfWidth]
+                                    [rotY + halfWidth]
                                     = tetrimino_[x][y];
                     }
                 }
@@ -195,10 +238,12 @@ package {
                     clearCurrentPosition();
 
                     tetrimino_ = tempTetrimino;
+                    success = false;
                 }
             }
 
             updateGrid();
+            return success;
         }
 
         private function checkOffset(offX:int = 0, offY:int = 0):Boolean
