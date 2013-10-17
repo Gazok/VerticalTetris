@@ -174,6 +174,9 @@ package {
         {
             world.remove(this);
             active_ = false;
+
+            grid_.refresh();
+            grid_.addTetrimino();
         }
 
         private function gridRotate(dir:int):Boolean

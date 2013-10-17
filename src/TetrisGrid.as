@@ -10,6 +10,8 @@ package {
         private const gridHeight_:int = 22;
         private var grid_:Array = new Array(gridWidth_);
 
+        private var bucket_:Array = new Array(0);
+
         public function TetrisGrid()
         {
             for (var i:int = 0; i < gridWidth_; ++i)
@@ -33,6 +35,34 @@ package {
                     this.world.add(grid_[i][j]);
                 }
             }
+
+            addTetrimino();
+        }
+
+        // Featuring Fisher-Yates Random Shuffle
+        public function addTetrimino():void
+        {
+            //if(bucket_.length == 0)
+            {
+                var bucket_:Array = new Array(1,2,3,4,5,6,7);
+
+                for (var i:int = bucket_.length - 1; i >= 0; --i)
+                {
+                    // Random number
+                    var j:int = Math.floor(Math.random() * i);
+
+                    // store the ith value
+                    var temp:int = bucket_[i];
+                    // put whatever is in index j in the ith position
+                    bucket_[i] = bucket_[j];
+                    // restore whatever was in the ith position to index j
+                    bucket_[j] = temp;
+                }
+            }
+
+            var tetriminoIndex:int = bucket_.pop();
+
+            world.add(new Tetrimino(tetriminoIndex, this));
         }
 
         public function isTaken(x:int, y:int):Boolean
@@ -58,7 +88,7 @@ package {
             for (var x:int = 0; x < gridWidth_; ++x)
             {
                 filledLine = true;
-                for (var y:int = 2; y < gridHeight_; ++y)
+                for (var y:int = 6; y < gridHeight_; ++y)
                 {
                     filledLine &&= grid_[x][y].isActive();
                 }
