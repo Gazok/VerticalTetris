@@ -6,7 +6,7 @@ package
 
 	public class Background extends Entity
 	{
-		[Embed(source="C:/Users/user/VerticalTetris/res/placeholder frame.png")] private const BG:Class;
+		[Embed(source="../res/placeholder frame.png")] private const BG:Class;
 
 		public function Background()
 		{

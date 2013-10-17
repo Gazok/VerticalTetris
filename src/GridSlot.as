@@ -21,7 +21,7 @@ package {
 
         public function GridSlot(gridX:int, gridY:int, colorIndex:int = 0)
         {
-            super(gridX * (1 + block.width), gridY * (1 + block.height));
+            super(43 + gridX * (0 + block.width), 8 + gridY * (0 + block.height));
             graphic = block;
             setColor(colorIndex);
         }

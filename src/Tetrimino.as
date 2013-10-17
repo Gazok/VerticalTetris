@@ -128,12 +128,15 @@ package {
 
         public function moveDown():void
         {
-            if (!gridMove(0, 1) && !noKill_)
+            if (active_)
             {
-                endTurn();
-            }
+                if (!gridMove(0, 1) && !noKill_)
+                {
+                    endTurn();
+                }
 
-            noKill_ = false;
+                noKill_ = false;
+            }
         }
 
         public function gridMove(moveX:int, moveY:int):Boolean
