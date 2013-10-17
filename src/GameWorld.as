@@ -13,11 +13,13 @@ package {
 
         override public function begin():void
         {
+            add(new Background());
             var t:TetrisGrid = new TetrisGrid();
             add(t)
             add(new Tetrimino(1, t));
             add(new Highscore());
             TetrisMusic.loop();
+            
         }
     }
 
