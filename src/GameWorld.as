@@ -15,7 +15,7 @@ package {
         {
             var t:TetrisGrid = new TetrisGrid();
             add(t)
-            add(new Tetrimino(4, t));
+            add(new Tetrimino(6, t));
             add(new Highscore());
             TetrisMusic.loop();
         }

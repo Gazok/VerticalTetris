@@ -1,6 +1,8 @@
 package {
 
     import net.flashpunk.Entity;
+    import net.flashpunk.utils.Input;
+    import net.flashpunk.utils.Key;
 
     public class Tetrimino extends Entity
     {
@@ -48,55 +50,125 @@ package {
             y = 0;
 
             tetrimino_ = tetriminos_[tetriminoType_];
+
+            updateGrid();
+            gridMove(0, 2);
+            rotateCCW();
         }
 
         public override function update():void
         {
-            updateGrid();
+            if (Input.pressed(Key.A))
+            {
+                rotateCCW();
+            }
+            if (Input.pressed(Key.D))
+            {
+                rotateCW();
+            }
         }
 
         public function hardDrop():void
         {
         }
 
-        public function rotateCW():void
+        public function gridMove(moveX:int, moveY:int):Boolean
         {
-            var newTetrimino:Array = new Array;
-            for (var x:int = 0; x < tetrimino_.length; ++x)
+            if (checkOffset(moveX, moveY))
             {
-                newTetrimino.push_back(new Array);
+                clearCurrentPosition();
+                x += moveX;
+                y += moveY;
+                updateGrid();
 
-                for (var y:int = 0; y < tetrimino_[x].length; ++y)
-                {
-                    newTetrimino.push_back(tetrimino_[tetrimino_[x].length - y]
-                                                     [tetrimino_.length - x]);
-                }
+                return true;
             }
 
-            tetrimino_ = newTetrimino;
+            return false;
+        }
+
+        public function rotateCW():void
+        {
+            gridRotate(-1);
         }
 
         public function rotateCCW():void
         {
-            var newTetrimino:Array = new Array;
+            gridRotate(1);
+        }
+
+        private function gridRotate(dir:int):void
+        {
+            if (tetrimino_.length == 2) return; // Don't rotate square
+
+            // Create new array
+            var newTetrimino:Array = new Array(tetrimino_[0].length);
+
+            for (var i:int = 0; i < tetrimino_[0].length; ++i)
+            {
+                newTetrimino[i] = new Array(tetrimino_.length);
+            }
+
+            // Rotate
+            var rotX:int;
+            var rotY:int;
             for (var x:int = 0; x < tetrimino_.length; ++x)
             {
-                newTetrimino.push_back(new Array);
-
+                const transX:int = x - (tetrimino_.length - 1) / 2;
                 for (var y:int = 0; y < tetrimino_[x].length; ++y)
                 {
-                    newTetrimino.push_back(tetrimino_[y][x]);
+                    const transY:int = y - (tetrimino_.length - 1) / 2;
+
+                    rotX = dir * transY;
+                    rotY = - dir * transX;
+
+                    newTetrimino[rotX + 1][rotY + 1] = tetrimino_[x][y];
                 }
             }
 
+            clearCurrentPosition();
             tetrimino_ = newTetrimino;
+            updateGrid();
+        }
+
+        private function checkOffset(offX:int, offY:int):Boolean
+        {
+            for (var x:int = 0; x < tetrimino_.length; ++x)
+            {
+                for (var y:int = 0; y < tetrimino_[x].length; ++y)
+                {
+                    if (tetrimino_[x][y])
+                    {
+                        if (grid_.isTaken(x + this.x + offX, y + this.y + offY))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private function clearCurrentPosition():void
+        {
+            for (var x:int = 0; x < tetrimino_.length; ++x)
+            {
+                for (var y:int = 0; y < tetrimino_[x].length; ++y)
+                {
+                    if (tetrimino_[x][y])
+                    {
+                        grid_.setColor(x + this.x, y + this.y, 0);
+                    }
+                }
+            }
         }
 
         private function updateGrid():void
         {
             for (var x:int = 0; x < tetrimino_.length; ++x)
             {
-                for (var y:int = 0; y < tetrimino_.length; ++y)
+                for (var y:int = 0; y < tetrimino_[x].length; ++y)
                 {
                     if (tetrimino_[x][y])
                     {
