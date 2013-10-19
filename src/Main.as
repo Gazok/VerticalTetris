@@ -6,7 +6,7 @@ package {
     {
         public function Main()
         {
-            super(640, 480);
+            super(350, 400);
         }
 
         override public function init():void
