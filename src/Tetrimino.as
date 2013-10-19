@@ -181,9 +181,16 @@ package {
             updateGrid();
             active_ = false;
 
-            world.remove(this);
-            grid_.refresh();
-            grid_.addTetrimino();
+            if (y >= 2)
+            {
+                world.remove(this);
+                grid_.refresh();
+                grid_.addTetrimino();
+            }
+            else
+            {
+                FP.world = new GameWorld;
+            }
         }
 
         private function gridRotate(dir:int):Boolean
