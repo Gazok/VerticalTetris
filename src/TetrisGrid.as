@@ -10,7 +10,7 @@ package {
         private const gridHeight_:int = 22;
         private var grid_:Array = new Array(gridWidth_);
 
-        private var bucket_:Array = new Array(0);
+        private var bucket_:Array = new Array();
         private var hs_:Highscore;
 
         public function TetrisGrid(hs:Highscore)
@@ -44,14 +44,14 @@ package {
         // Featuring Fisher-Yates Random Shuffle
         public function addTetrimino():void
         {
-            //if(bucket_.length == 0)
+            if (bucket_.length == 0)
             {
-                var bucket_:Array = new Array(1,2,3,4,5,6,7);
+                bucket_ = new Array(1,2,3,4,5,6,7);
 
                 for (var i:int = bucket_.length - 1; i >= 0; --i)
                 {
                     // Random number
-                    var j:int = Math.floor(Math.random() * i);
+                    var j:int = Math.round(Math.random() * i);
 
                     // store the ith value
                     var temp:int = bucket_[i];
