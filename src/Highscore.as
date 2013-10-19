@@ -14,14 +14,15 @@ package
 		public function Highscore( x:int = 0, y:int = 0)
 		{
             score = 0;
-            highscore = new Text("Score: " + score, 200, 130);
+            highscore = new Text(""+score, 240, 130);
+            highscore.size = 30;
 			graphic = highscore;
 		}
 
         public function addToScore(scoreAdd:int):void
         {
             score += scoreAdd;
-            highscore.text =  "Score: " + score;
+            highscore.text = ""+score;
         }
 	}
 }
