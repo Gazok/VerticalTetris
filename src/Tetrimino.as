@@ -88,6 +88,8 @@ package {
         {
             if (active_)
             {
+                clearCurrentPosition();
+
                 if (Input.pressed(Key.A))
                 {
                     rotateCCW();
@@ -106,7 +108,7 @@ package {
                 }
                 if (Input.pressed(Key.RIGHT))
                 {
-                    if(gridMove(1, 0))
+                    if (gridMove(1, 0))
                     {
                         noKill_ = true;
                     }
@@ -123,6 +125,8 @@ package {
                 {
                     moveTimer_ = FP.alarm(0.5, this.moveDown);
                 }
+
+                updateGrid();
             }
         }
 
@@ -130,10 +134,14 @@ package {
         {
             if (active_)
             {
+                clearCurrentPosition();
+
                 if (!gridMove(0, 1) && !noKill_)
                 {
                     endTurn();
                 }
+
+                updateGrid();
 
                 noKill_ = false;
             }
@@ -143,10 +151,8 @@ package {
         {
             if (checkOffset(moveX, moveY))
             {
-                clearCurrentPosition();
                 x += moveX;
                 y += moveY;
-                updateGrid();
 
                 return true;
             }
@@ -182,8 +188,6 @@ package {
         private function gridRotate(dir:int):Boolean
         {
             if (tetrimino_.length == 2) return true; // Don't rotate O block
-
-            clearCurrentPosition();
 
             var success:Boolean = true;
             var tempTetrimino:Array = tetrimino_;
@@ -241,20 +245,16 @@ package {
             {
                 if (!gridMove(1,0) && !gridMove(-1,0))
                 {
-                    clearCurrentPosition();
-
                     tetrimino_ = tempTetrimino;
                     success = false;
                 }
             }
 
-            updateGrid();
             return success;
         }
 
         private function checkOffset(offX:int = 0, offY:int = 0):Boolean
         {
-            clearCurrentPosition(); // Don't collide with myself
             for (var x:int = 0; x < tetrimino_.length; ++x)
             {
                 for (var y:int = 0; y < tetrimino_[x].length; ++y)
@@ -263,14 +263,13 @@ package {
                     {
                         if (grid_.isTaken(x + this.x + offX, y + this.y + offY))
                         {
-                            updateGrid(); // Redraw myself
+                            //updateGrid(); // Redraw myself
                             return false;
                         }
                     }
                 }
             }
 
-            updateGrid(); // Redraw myself
             return true;
         }
 
