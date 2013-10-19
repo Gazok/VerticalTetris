@@ -19,5 +19,10 @@ package {
             add(hs);
             TetrisMusic.loop();
         }
+
+        override public function end():void
+        {
+            TetrisMusic.stop();
+        }
     }
 }
