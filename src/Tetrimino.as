@@ -263,7 +263,6 @@ package {
                     {
                         if (grid_.isTaken(x + this.x + offX, y + this.y + offY))
                         {
-                            //updateGrid(); // Redraw myself
                             return false;
                         }
                     }
