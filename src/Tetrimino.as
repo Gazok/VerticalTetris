@@ -130,21 +130,21 @@ package {
             }
         }
 
+        // Note - gets called during event loop, NOT update
         public function moveDown():void
         {
-            if (active_)
+            if (!active_) return;
+
+            clearCurrentPosition();
+
+            if (!gridMove(0, 1) && !noKill_)
             {
-                clearCurrentPosition();
-
-                if (!gridMove(0, 1) && !noKill_)
-                {
-                    endTurn();
-                }
-
-                updateGrid();
-
-                noKill_ = false;
+                endTurn();
             }
+
+            updateGrid();
+
+            noKill_ = false;
         }
 
         public function gridMove(moveX:int, moveY:int):Boolean
@@ -178,9 +178,10 @@ package {
 
         public function endTurn():void
         {
-            world.remove(this);
+            updateGrid();
             active_ = false;
 
+            world.remove(this);
             grid_.refresh();
             grid_.addTetrimino();
         }
@@ -288,6 +289,8 @@ package {
 
         private function updateGrid():void
         {
+            if (!active_) return;
+
             for (var x:int = 0; x < tetrimino_.length; ++x)
             {
                 for (var y:int = 0; y < tetrimino_[x].length; ++y)

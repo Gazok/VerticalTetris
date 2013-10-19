@@ -87,17 +87,10 @@ package {
         public function refresh():void
         {
             var numLinesCleared:int = 0;
-            var filledLine:Boolean;
 
-            for (var x:int = 0; x < gridWidth_; ++x)
+            for (var x:int = gridWidth_ - 1; x >= 0; --x)
             {
-                filledLine = true;
-                for (var y:int = 6; y < gridHeight_; ++y)
-                {
-                    filledLine &&= grid_[x][y].isActive();
-                }
-
-                if (filledLine)
+                while(checkLine(x))
                 {
                     ++numLinesCleared;
                     clearLine(x);
@@ -105,6 +98,18 @@ package {
             }
 
             hs_.addToScore(Math.pow(numLinesCleared,2) * 100);
+        }
+
+        private function checkLine(checkX:int):Boolean
+        {
+            var filledLine:Boolean = true;
+
+            for (var y:int = 6; y < gridHeight_; ++y)
+            {
+                filledLine &&= grid_[checkX][y].isActive();
+            }
+
+            return filledLine;
         }
 
         private function clearLine(clearX:int):void
