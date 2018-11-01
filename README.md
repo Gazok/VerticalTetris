@@ -1,7 +1,7 @@
 Uptris
 ======
 
-An entry for Warwick Game Design's fortnightly competition.
+An entry for [Warwick Game Design](http://uwgd.co.uk/)'s fortnightly competition.
 
 Theme: Stupidity
 
